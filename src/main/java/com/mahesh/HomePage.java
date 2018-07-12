@@ -1,11 +1,9 @@
 package com.mahesh;
 
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.WebPage;
 
 public class HomePage extends WebPage {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +20,13 @@ public class HomePage extends WebPage {
             public void onClick() {
                 AnotherPage anotherPage = new AnotherPage(parameters);
                 HomePage.this.setResponsePage(anotherPage);
+            }
+        });
+
+        add(new Link<Void>("searchFunds") {
+            @Override
+            public void onClick() {
+                setResponsePage(SearchFundsPage.class);
             }
         });
 	}
