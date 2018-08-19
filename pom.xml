@@ -42,7 +42,7 @@
 	</licenses>
 	<properties>
 		<wicket.version>8.0.0</wicket.version>
-		<jetty9.version>9.4.7.v20170914</jetty9.version>
+		<jetty9.version>9.4.11.v20180605</jetty9.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<junit.version>4.12</junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,11 +65,17 @@
 		-->
 
 		<!-- LOGGING DEPENDENCIES - SLF4J-SIMPLE -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.slf4j</groupId>-->
+			<!--<artifactId>slf4j-simple</artifactId>-->
+			<!--<version>${slf4j.version}</version>-->
+		<!--</dependency>-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 		<!--  JUNIT DEPENDENCY FOR TESTING -->
 		<dependency>
@@ -92,6 +98,19 @@
 			<version>${jetty9.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.32</version>
+		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-util -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>${jetty9.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 
 		<!-- uncomment if WebSocket support is needed
 		<dependency>
