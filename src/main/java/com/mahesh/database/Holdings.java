@@ -1,5 +1,9 @@
 package com.mahesh.database;
 
+import com.mahesh.utilities.HoldingRecord;
+
+import java.util.ArrayList;
+
 public class Holdings {
 
     //If Fund already exists, then retrieve fund id from fund table
@@ -12,4 +16,9 @@ public class Holdings {
     //Check if record exists for filing id, fund id and cusip.
     //If Yes, get Holding Id. Update it.
     //If No, insert Holding record.
+
+    public void StoreFilingData(ArrayList<HoldingRecord> holdingRecords) {
+        FundReportsDb fundReportsDb = new FundReportsDb();
+        fundReportsDb.getConn();
+    }
 }

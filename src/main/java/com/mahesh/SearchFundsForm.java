@@ -3,15 +3,20 @@ package com.mahesh;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+import com.mahesh.utilities.FilingDetailPage;
+import com.mahesh.utilities.HoldingRecord;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SearchFundsForm extends Form {
     private final static Logger logger = LoggerFactory.getLogger(SearchFundsForm.class);
@@ -53,16 +58,33 @@ public class SearchFundsForm extends Form {
                         Search13FResultsPage s = new Search13FResultsPage(search13fSite);
                         ArrayList<FilingLinkInfo> filing13FLinks = s.get13FFilingLinks();
                         logger.info("Filing Link: " + filing13FLinks.size());
-                        if (filing13FLinks.size() > 0) {
-                            for (int ii=0; ii<filing13FLinks.size(); ii++)
-                                logger.info(filing13FLinks.get(ii).toString());
+//                        if (filing13FLinks.size() > 0) {
+//                            for (int ii=0; ii<filing13FLinks.size(); ii++)
+//                                logger.info(filing13FLinks.get(ii).toString());
 //                            request.setAttribute("filingLinks", filing13FLinks);
 //                            request.getRequestDispatcher("OptionalUpdates.jsp").forward(request, response);
-                            return;
+//                            return;
+//                        }
+                        if (filing13FLinks != null) {
+                            FilingDetailPage filingDetailPage = new FilingDetailPage(filing13FLinks.get(0).getLink());
+                            String rawFilingURL = filingDetailPage.getRawFiling();
+                            logger.info ("Raw Filing URL: " + rawFilingURL);
+                            if (rawFilingURL != null) {
+                                HashMap<String, HoldingRecord> holdingRecords = filingDetailPage.parseRawFiling(rawFilingURL);
+//                                request.setAttribute("fData", holdingRecords);
+//                                request.getRequestDispatcher("13fdata.jsp").forward(request, response);
+
+//                                StoreFilingData storeFilingData = new StoreFilingData();
+//                                storeFilingData.store13FData(holdingRecords, filingDetailPage);
+                            }
                         }
                     }
                 } catch (ElementNotFoundException e) {
                     System.out.println("Element Not Found Exception");
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (MalformedURLException e) {
