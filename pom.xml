@@ -109,8 +109,15 @@
             <artifactId>jetty-util</artifactId>
             <version>${jetty9.version}</version>
         </dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.12</version>
+		</dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 
 		<!-- uncomment if WebSocket support is needed
 		<dependency>
