@@ -18,6 +18,9 @@ public class FundsTest {
     @Test
     public void delete() {
         Funds funds = new Funds();
-        funds.delete("TestFund");
+        Funds retFunds = funds.getFund("TestFund");
+        Filings filings = new Filings();
+        filings.delete((int) retFunds.fundId);
+        funds.delete((int) retFunds.fundId);
     }
 }

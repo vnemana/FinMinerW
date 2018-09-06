@@ -59,4 +59,20 @@ public class Funds {
             e.printStackTrace();
         }
     }
+
+    public void delete(int fundId) {
+        try {
+            FundReportsDb db = new FundReportsDb();
+            Connection conn = db.getConn();
+            String delString = "delete from Fund where fundId=?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(delString);
+            preparedStatement.setInt(1, fundId);
+
+            preparedStatement.execute();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

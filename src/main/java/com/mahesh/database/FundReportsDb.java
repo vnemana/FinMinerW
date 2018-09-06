@@ -14,7 +14,7 @@ public class FundReportsDb {
     Connection getConn() {
         conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/FundReports?user=mahesh&password=goldpen62&serverTimezone=US/Pacific&useSSL=false");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/FundReports?serverTimezone=US/Pacific&useSSL=false", "mahesh", "goldpen62");
         } catch (SQLException e) {
             e.printStackTrace();
         }
