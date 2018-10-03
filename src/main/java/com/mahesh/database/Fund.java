@@ -2,8 +2,8 @@ package com.mahesh.database;
 
 import java.sql.*;
 
-public class Funds {
-    long fundId;
+public class Fund {
+    int fundId;
     String fundName;
 
     public void insert (String fundName) {
@@ -22,8 +22,8 @@ public class Funds {
         }
     }
 
-    public Funds getFund (String fundName) {
-        Funds funds = new Funds();
+    public Fund getFund (String fundName) {
+        Fund Fund = new Fund();
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -32,16 +32,22 @@ public class Funds {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectString);
 
-            while (rs.next()) {
-                funds.fundId = rs.getInt("fundId");
-                funds.fundName = rs.getString("fundName");
+            if (rs.next() == false) {
+                return null;
+            }
+            else {
+                do {
+                    Fund.fundId = rs.getInt("fundId");
+                    Fund.fundName = rs.getString("fundName");
+                } while (rs.next());
             }
             rs.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return funds;
+        return Fund;
     }
 
     public void delete (String fundName) {

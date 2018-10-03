@@ -7,32 +7,32 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 
-public class FilingsTest {
+public class FilingTest {
 
     @Test (expected = SQLIntegrityConstraintViolationException.class)
     public void insert_with_invalid_fund_id() throws SQLException {
-        Filings filings = new Filings();
+        Filing filing = new Filing();
         Date filingDate = new Date(20180301);
         Date reportDate = new Date(20180301);
         String filingType = "13-F";
 
-        filings.insert(1, filingDate, filingType, reportDate);
+        filing.insert(1, filingDate, filingType, reportDate);
     }
 
     @Test
     public void insert_with_valid_fund_id() {
         try {
-            Funds funds  = new Funds();
-            funds.insert("TestFund");
-            Funds retFund = funds.getFund("TestFund");
+            Fund fund = new Fund();
+            fund.insert("TestFund");
+            Fund retFund = fund.getFund("TestFund");
 
-            Filings filings = new Filings();
+            Filing filing = new Filing();
             Date filingDate = new Date(20180301);
             Date reportDate = new Date(20180301);
             String filingType = "13-F";
 
-            filings.insert(retFund.fundId, filingDate, filingType, reportDate);
-            Filings retFiling = filings.getFiling(retFund.fundId, filingDate, filingType);
+            filing.insert(retFund.fundId, filingDate, filingType, reportDate);
+            Filing retFiling = filing.getFiling(retFund.fundId, filingDate, filingType);
 
             assert(retFiling.fundId == retFund.fundId);
             assert(retFiling.reportDate == reportDate);

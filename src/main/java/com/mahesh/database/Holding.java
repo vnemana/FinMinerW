@@ -2,13 +2,10 @@ package com.mahesh.database;
 
 import com.mahesh.utilities.HoldingRecord;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
-public class Holdings {
+public class Holding {
     int fundId;
     int filingId;
     int holdingId;
@@ -41,6 +38,36 @@ public class Holdings {
         }
     }
 
+    public ArrayList<Holding> getHoldings (long filingId) throws SQLException {
+        ArrayList<Holding> holdings = new ArrayList<>();
+        try {
+            FundReportsDb db = new FundReportsDb();
+            Connection conn = db.getConn();
+
+            String selectString = "select * from Holding where filingId = " + filingId;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(selectString);
+
+            while (rs.next()) {
+                Holding holding = new Holding();
+                holding.fundId = rs.getInt("fundId");
+                holding.filingId = rs.getInt("filingId");
+                holding.holdingId = rs.getInt("holdingId");
+                holding.cusip = rs.getString("cusip");
+                holding.stock = rs.getString("stock");
+                holding.numShares = rs.getInt("numShares");
+                holding.position = rs.getDouble("position");
+
+                holdings.add(holding);
+            }
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
+        return holdings;
+    }
     //If Fund already exists, then retrieve fund id from fund table
     //  Else Insert into Fund table
     //  Get FundId
