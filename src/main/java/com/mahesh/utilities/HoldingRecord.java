@@ -1,5 +1,6 @@
 package com.mahesh.utilities;
 
+//TODO: Ideally HoldingRecord and Holding should be the same thing.
 public class HoldingRecord implements Comparable{
     private final String issuerName;
     private final String cusip;
@@ -27,7 +28,6 @@ public class HoldingRecord implements Comparable{
         this.numberOfShares = numberOfShares;
         this.position = position;
     }
-
 
     @Override
     public int compareTo(@SuppressWarnings("NullableProblems") Object o) {

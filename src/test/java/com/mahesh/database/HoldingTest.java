@@ -1,5 +1,11 @@
 package com.mahesh.database;
 
+import com.mahesh.database.dao.FilingDao;
+import com.mahesh.database.dao.FundDao;
+import com.mahesh.database.dao.HoldingDao;
+import com.mahesh.database.dto.Filing;
+import com.mahesh.database.dto.Fund;
+import com.mahesh.database.dto.Holding;
 import org.junit.Test;
 
 import java.sql.Date;
@@ -8,13 +14,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
-
 public class HoldingTest {
 
     @Test (expected = SQLIntegrityConstraintViolationException.class)
     public void insert_with_invalid_fund_id() throws SQLException {
-        Holding holdings = new Holding();
+        HoldingDao hDao = new HoldingDao();
         int fundId = 1;
         int filingId = 1;
         String cusip = "ABCUSIP";
@@ -22,36 +26,35 @@ public class HoldingTest {
         double position = 12345.5;
         int numShares = 123;
 
-        holdings.insert(fundId, filingId, cusip, stock, position, numShares);
-
-//        ArrayList<Holding> retHoldings = holdings.getHoldings(filingId);
-//        assert(retHoldings.get(0).filingId == holdings.filingId);
+        hDao.insertHolding(fundId, filingId, cusip, stock, position, numShares);
     }
-
     @Test
     public void insert_with_valid_fund_and_filing_id() {
         try {
-            Fund fund = new Fund();
-            Fund retFund = fund.getFund("TestFund");
+            FundDao fundDao = new FundDao();
+            Fund retFund = fundDao.getFund("TestFund");
 
             if (retFund == null) {
-                fund.insert("TestFund");
-                retFund = fund.getFund("TestFund");
+                fundDao.insertFund("TestFund");
+                retFund = fundDao.getFund("TestFund");
             }
 
-            Filing filing = new Filing();
+            FilingDao filingDao = new FilingDao();
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set (2018, 03, 01);
+            calendar.set(2018, 03, 01);
             Date filingDate = new Date(calendar.getTimeInMillis());
             Date reportDate = new Date(calendar.getTimeInMillis());
 
             String filingType = "13-F";
-            Filing retFiling = filing.getFiling(retFund.fundId, filingDate, filingType);
+            Filing retFiling = filingDao.getFiling(retFund.getFundId(),
+                    filingDate, filingType);
 
             if (retFiling == null) {
-                filing.insert(retFund.fundId, filingDate, filingType, reportDate);
-                retFiling = filing.getFiling(retFund.fundId, filingDate, filingType);
+                filingDao.insertFiling(retFund.getFundId(), filingDate,
+                        filingType, reportDate);
+                retFiling = filingDao.getFiling(retFund.getFundId(),
+                        filingDate, filingType);
             }
 
             String cusip = "ABCUSIP";
@@ -59,16 +62,66 @@ public class HoldingTest {
             double position = 12345.6;
             int numShares = 123;
 
-            Holding holding = new Holding();
-            holding.insert(retFund.fundId, retFiling.filingId, cusip, stock, position, numShares);
+            HoldingDao holdingDao = new HoldingDao();
+            holdingDao.insertHolding(retFund.getFundId(), retFiling
+                            .getFilingId(), cusip, stock, position, numShares);
+
             ArrayList<Holding> holdings = new ArrayList<>();
-            holdings = holding.getHoldings(retFiling.filingId);
-            assert (holdings.get(0).cusip .equals("ABCUSIP"));
+            holdings = holdingDao.getHoldings(retFiling.getFilingId());
+            assert (holdings.get(0).getCusip().equals("ABCUSIP"));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test (expected = SQLIntegrityConstraintViolationException.class)
+    public void insert_two_holdings_same_cusip() throws SQLException {
+        try {
+            FundDao fundDao = new FundDao();
+            Fund retFund = fundDao.getFund("TestFund");
 
+            if (retFund == null) {
+                fundDao.insertFund("TestFund");
+                retFund = fundDao.getFund("TestFund");
+            }
+
+            FilingDao filingDao = new FilingDao();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set (2018, 03, 01);
+            Date filingDate = new Date(calendar.getTimeInMillis());
+            Date reportDate = new Date(calendar.getTimeInMillis());
+
+            String filingType = "13-F";
+            Filing retFiling = filingDao.getFiling(retFund.getFundId(), filingDate,
+                    filingType);
+
+            if (retFiling == null) {
+                filingDao.insertFiling(retFund.getFundId(), filingDate, filingType,
+                        reportDate);
+                retFiling = filingDao.getFiling(retFund.getFundId(), filingDate,
+                        filingType);
+            }
+
+            String cusip = "ABCUSIP";
+            String stock = "GOOGL";
+            double position = 12345.6;
+            int numShares = 123;
+
+            HoldingDao holdingDao = new HoldingDao();
+            holdingDao.insertHolding(retFund.getFundId(),  retFiling
+                            .getFilingId(), cusip, stock, position, numShares);
+
+            holdingDao.insertHolding(retFund.getFundId(),  retFiling
+                            .getFilingId(), cusip, stock, position, numShares);
+            ArrayList<Holding> holdings = new ArrayList<>();
+            holdings = holdingDao.getHoldings(retFiling.getFilingId());
+            assert (holdings.get(0).getCusip().equals("ABCUSIP"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

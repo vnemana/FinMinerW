@@ -1,4 +1,4 @@
-package com.mahesh;
+package com.mahesh.web;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;

@@ -1,4 +1,4 @@
-package com.mahesh;
+package com.mahesh.web;
 
 public class SearchFundsPage extends FMTemplate {
     public SearchFundsPage() {

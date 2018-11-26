@@ -1,4 +1,4 @@
-package com.mahesh;
+package com.mahesh.web;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;

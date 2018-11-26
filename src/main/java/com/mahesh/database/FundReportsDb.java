@@ -7,14 +7,16 @@ import java.sql.SQLException;
 public class FundReportsDb {
     private Connection conn;
 
-    FundReportsDb(){
+    public FundReportsDb(){
         conn = null;
     }
 
-    Connection getConn() {
+    public Connection getConn() {
         conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/FundReports?serverTimezone=US/Pacific&useSSL=false", "mahesh", "goldpen62");
+            conn = DriverManager.getConnection
+                    ("jdbc:mysql://localhost:3306/FundReports?serverTimezone=" +
+                            "US/Pacific&useSSL=false", "mahesh", "goldpen62");
         } catch (SQLException e) {
             e.printStackTrace();
         }

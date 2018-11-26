@@ -1,4 +1,4 @@
-package com.mahesh;
+package com.mahesh.web;
 
 import org.apache.wicket.markup.html.panel.Panel;
 

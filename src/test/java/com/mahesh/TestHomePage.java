@@ -1,5 +1,7 @@
 package com.mahesh;
 
+import com.mahesh.web.HomePage;
+import com.mahesh.web.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;

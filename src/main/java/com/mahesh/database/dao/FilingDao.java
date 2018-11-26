@@ -1,20 +1,22 @@
-package com.mahesh.database;
+package com.mahesh.database.dao;
+
+import com.mahesh.database.FundReportsDb;
+import com.mahesh.database.dto.Filing;
 
 import java.sql.*;
 
-public class Filing {
-    int filingId;
-    int fundId;
-    Date filingDate;
-    String filingType;
-    Date reportDate;
+public class FilingDao {
+    public FilingDao() {
+    }
 
-    public void insert (int fundId, Date filingDate, String filingType, Date reportDate) throws SQLException {
+    public void insertFiling (int fundId, Date filingDate, String filingType,
+                              Date reportDate) throws SQLException {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
 
-            String insertString = "insert into Filing (fundId, filingDate, filingType, reportDate) values (?, ?, ?, ?)";
+            String insertString = "insert into Filing (fundId, filingDate, " +
+                    "filingType, reportDate) values (?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(insertString);
             preparedStatement.setLong(1, fundId);
@@ -36,7 +38,8 @@ public class Filing {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
 
-            String selectString = "select * from Filing where fundId = " + fundId + " and filingDate = '" + filingDate.toString()
+            String selectString = "select * from Filing where fundId = " +
+                    fundId + " and filingDate = '" + filingDate.toString()
                     + "' and filingType = '" + filingType + "'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectString);
@@ -46,10 +49,10 @@ public class Filing {
             }
             else {
                 do {
-                    filing.filingId = rs.getInt("filingId");
-                    filing.filingDate = rs.getDate("filingDate");
-                    filing.reportDate = rs.getDate("reportDate");
-                    filing.filingType = rs.getString("filingType");
+                    filing.setFilingId(rs.getInt("filingId"));
+                    filing.setFilingDate(rs.getDate("filingDate"));
+                    filing.setReportDate(rs.getDate("reportDate"));
+                    filing.setFilingType(rs.getString("filingType"));
                 } while (rs.next());
             }
             rs.close();
@@ -61,7 +64,7 @@ public class Filing {
         return filing;
     }
 
-    public void delete (int fundId) {
+    public void deleteFiling (int fundId) {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();

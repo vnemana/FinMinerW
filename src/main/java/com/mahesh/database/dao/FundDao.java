@@ -1,12 +1,12 @@
-package com.mahesh.database;
+package com.mahesh.database.dao;
+
+import com.mahesh.database.FundReportsDb;
+import com.mahesh.database.dto.Fund;
 
 import java.sql.*;
 
-public class Fund {
-    int fundId;
-    String fundName;
-
-    public void insert (String fundName) {
+public class FundDao {
+    public void insertFund (String fundName) {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -22,8 +22,8 @@ public class Fund {
         }
     }
 
-    public Fund getFund (String fundName) {
-        Fund Fund = new Fund();
+    public Fund getFund(final String fundName) {
+        Fund fund = new Fund();
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -37,8 +37,8 @@ public class Fund {
             }
             else {
                 do {
-                    Fund.fundId = rs.getInt("fundId");
-                    Fund.fundName = rs.getString("fundName");
+                    fund.setFundId(rs.getInt("fundId"));
+                    fund.setFundName(rs.getString("fundName"));
                 } while (rs.next());
             }
             rs.close();
@@ -47,10 +47,27 @@ public class Fund {
             e.printStackTrace();
             return null;
         }
-        return Fund;
+        return fund;
     }
 
-    public void delete (String fundName) {
+    public void updateFund(final int fundId, final String fundName) {
+        try {
+            FundReportsDb db = new FundReportsDb();
+            Connection conn = db.getConn();
+            String delString = "update Fund set fundName=? where fundId=?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(delString);
+            preparedStatement.setString (1, fundName);
+            preparedStatement.setLong(2, fundId);
+
+            preparedStatement.execute();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteFund (final String fundName) {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -66,7 +83,7 @@ public class Fund {
         }
     }
 
-    public void delete(int fundId) {
+    public void deleteFund (final int fundId) {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -81,4 +98,5 @@ public class Fund {
             e.printStackTrace();
         }
     }
+
 }

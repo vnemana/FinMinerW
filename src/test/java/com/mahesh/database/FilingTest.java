@@ -1,5 +1,9 @@
 package com.mahesh.database;
 
+import com.mahesh.database.dao.FilingDao;
+import com.mahesh.database.dao.FundDao;
+import com.mahesh.database.dto.Filing;
+import com.mahesh.database.dto.Fund;
 import org.junit.Test;
 
 import java.sql.Date;
@@ -16,26 +20,29 @@ public class FilingTest {
         Date reportDate = new Date(20180301);
         String filingType = "13-F";
 
-        filing.insert(1, filingDate, filingType, reportDate);
+        FilingDao fDao = new FilingDao();
+        fDao.insertFiling(1, filingDate, filingType, reportDate);
     }
 
     @Test
     public void insert_with_valid_fund_id() {
         try {
-            Fund fund = new Fund();
-            fund.insert("TestFund");
-            Fund retFund = fund.getFund("TestFund");
+            FundDao fundDao = new FundDao();
+            fundDao.insertFund("TestFund");
+            Fund retFund = fundDao.getFund("TestFund");
 
-            Filing filing = new Filing();
+            FilingDao filingDao = new FilingDao();
             Date filingDate = new Date(20180301);
             Date reportDate = new Date(20180301);
             String filingType = "13-F";
 
-            filing.insert(retFund.fundId, filingDate, filingType, reportDate);
-            Filing retFiling = filing.getFiling(retFund.fundId, filingDate, filingType);
+            filingDao.insertFiling(retFund.getFundId(), filingDate, filingType,
+                    reportDate);
+            Filing retFiling = filingDao.getFiling(retFund.getFundId(), filingDate,
+                    filingType);
 
-            assert(retFiling.fundId == retFund.fundId);
-            assert(retFiling.reportDate == reportDate);
+            assert(retFiling.getFundId() == retFund.getFundId());
+            assert(retFiling.getReportDate() == reportDate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
