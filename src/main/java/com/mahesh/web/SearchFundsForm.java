@@ -39,8 +39,10 @@ public class SearchFundsForm extends Form {
             final HtmlPage page = webClient.getPage(urlString);
 
             HtmlElement body = page.getBody();
-            HtmlElement series = body.getOneHtmlElementByAttribute("div", "id", "seriesDiv");
-            HtmlTable table = series.getOneHtmlElementByAttribute("table", "summary", "Results");
+            HtmlElement series = body.getOneHtmlElementByAttribute("div",
+                    "id", "seriesDiv");
+            HtmlTable table = series.getOneHtmlElementByAttribute("table",
+                    "summary", "Results");
 
             boolean firstRow = true;
             for (HtmlTableRow row : table.getRows()) {
@@ -65,17 +67,22 @@ public class SearchFundsForm extends Form {
 //                            request.getRequestDispatcher("OptionalUpdates.jsp").forward(request, response);
 //                            return;
 //                        }
-                        if (filing13FLinks != null) {
-                            FilingDetailPage filingDetailPage = new FilingDetailPage(filing13FLinks.get(0).getLink());
+                        if (filing13FLinks != null && !filing13FLinks.isEmpty()) {
+                            FilingDetailPage filingDetailPage = new
+                                    FilingDetailPage(filing13FLinks.get(0).getLink());
                             String rawFilingURL = filingDetailPage.getRawFiling();
                             logger.info ("Raw Filing URL: " + rawFilingURL);
                             if (rawFilingURL != null) {
-                                HashMap<String, HoldingRecord> holdingRecords = filingDetailPage.parseRawFiling(rawFilingURL);
+                                HashMap<String, HoldingRecord> holdingRecords
+                                        = filingDetailPage.parseRawFiling(rawFilingURL);
 //                                request.setAttribute("fData", holdingRecords);
 //                                request.getRequestDispatcher("13fdata.jsp").forward(request, response);
 
 //                                StoreFilingData storeFilingData = new StoreFilingData();
 //                                storeFilingData.store13FData(holdingRecords, filingDetailPage);
+                                SearchResultsDisplayPage searchResultsDisplayPage =
+                                        new SearchResultsDisplayPage(holdingRecords);
+                                setResponsePage(searchResultsDisplayPage);
                             }
                         }
                     }

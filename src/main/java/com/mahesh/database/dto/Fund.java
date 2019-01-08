@@ -32,4 +32,5 @@ public class Fund {
     public void setFundName(String fundName) {
         this.fundName = fundName;
     }
+
 }

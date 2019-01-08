@@ -2,6 +2,9 @@ package com.mahesh.utilities;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+import com.mahesh.web.SearchFundsForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,15 +20,14 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class FilingDetailPage {
     private String companyName;
     private HtmlPage filing13FPage;
     private static final String searchSite = "https://www.sec.gov";
-
+    private final static Logger logger = LoggerFactory.getLogger(
+            FilingDetailPage.class);
     public FilingDetailPage(String url) {
         try (final WebClient webClient = new WebClient()) {
             filing13FPage = webClient.getPage(url);
@@ -35,7 +37,8 @@ public class FilingDetailPage {
     }
 
     public String getRawFiling() {
-        HtmlTable resultsFiling13FTable = filing13FPage.getBody().getOneHtmlElementByAttribute("table",
+        HtmlTable resultsFiling13FTable = filing13FPage.getBody()
+                .getOneHtmlElementByAttribute( "table",
                 "summary", "Document Format Files");
         int numFormatFileRows = resultsFiling13FTable.getRowCount();
         //for each row
@@ -92,7 +95,11 @@ public class FilingDetailPage {
                 holdingRecords.put(cusip, hr);
             }
         }
-
+        Iterator it = holdingRecords.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            logger.info(pair.getValue().toString());
+        }
         return holdingRecords;
     }
 

@@ -1,10 +1,15 @@
 package com.mahesh.database.dto;
 
 import com.mahesh.database.FundReportsDb;
+import com.mahesh.database.dao.FilingDao;
+import com.mahesh.database.dao.FundDao;
+import com.mahesh.database.dao.HoldingDao;
 import com.mahesh.utilities.HoldingRecord;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Holding {
     int fundId;
@@ -103,14 +108,46 @@ public class Holding {
         fundReportsDb.getConn();
 
         //If Fund already exists, then retrieve fund id from fund table
-        //  Else Insert into Fund table
-        //  Get FundId
+        FundDao fundDao = new FundDao();
+        Fund dbFund = fundDao.getFund(fund.getFundName());
+        if (dbFund == null) {
+            //  Else Insert into Fund table
+            //  Get FundId
+            fundDao.insertFund(fund.getFundName());
+            dbFund = fundDao.getFund(fund.getFundName());
+        }
         //If Filing record already exists, get FilingID from Filing table.
-        //  Else insert into Filing table.
-        //  Get FilingId
+        FilingDao filingDao = new FilingDao();
+        Filing dbFiling = filingDao.getFiling(dbFund.getFundId(), filing
+                .getFilingDate(), filing.getFilingType());
+        if (dbFiling == null) {
+            //  Else insert into Filing table.
+            //  Get FilingId
+            try {
+                filingDao.insertFiling(dbFund.getFundId(), filing.getFilingDate(),
+                        filing.getFilingType(), filing.getReportDate());
+                dbFiling = filingDao.getFiling(dbFund.getFundId(), filing
+                        .getFilingDate(), filing.getFilingType());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         //For each holding record
         //Check if record exists for filing id, fund id and cusip.
         //If Yes, get Holding Id. Update it.
-        //If No, insert Holding record.
+        HoldingDao holdingDao = new HoldingDao();
+        for (int ii=0; ii<holdingRecords.size(); ii++) {
+            HoldingRecord hRecord = holdingRecords.get(ii);
+            try {
+                holdingDao.deleteHoldings(dbFiling.getFilingId());
+
+                //If No, insert Holding record.
+                holdingDao.insertHolding(dbFund.getFundId(),dbFiling.getFilingId
+                        (), hRecord.getCusip(), hRecord.getIssuerName(), hRecord.getPosition(),
+                        hRecord.getNumberOfShares());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

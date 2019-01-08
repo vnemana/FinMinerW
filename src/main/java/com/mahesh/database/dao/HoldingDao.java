@@ -34,6 +34,23 @@ public class HoldingDao {
         }
     }
 
+    public void deleteHoldings (long filingId) throws SQLException {
+        try {
+            FundReportsDb db = new FundReportsDb();
+            Connection conn = db.getConn();
+
+            String deletestring = "delete from Holding where filingId = " +
+                    filingId;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(deletestring);
+            rs.close();
+            conn.close();
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
+    }
+
     public ArrayList<Holding> getHoldings (long filingId) throws SQLException {
         ArrayList<Holding> holdings = new ArrayList<>();
         try {

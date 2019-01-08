@@ -4,6 +4,9 @@ package com.mahesh.utilities;
 public class HoldingRecord implements Comparable{
     private final String issuerName;
     private final String cusip;
+    private int numberOfShares;
+    private long position;
+
 
     public String getIssuerName() {
         return issuerName;
@@ -13,16 +16,14 @@ public class HoldingRecord implements Comparable{
         return cusip;
     }
 
-    public long getNumberOfShares() {
+    public int getNumberOfShares() {
         return numberOfShares;
     }
 
     public long getPosition() { return position; }
 
-    long numberOfShares;
-    long position;
-
-    HoldingRecord(String issuerName, String cusip, long numberOfShares, long position) {
+    HoldingRecord(String issuerName, String cusip, int numberOfShares, long
+            position) {
         this.issuerName = issuerName;
         this.cusip = cusip;
         this.numberOfShares = numberOfShares;
@@ -34,5 +35,11 @@ public class HoldingRecord implements Comparable{
         if (this.cusip.equals(((HoldingRecord)o).cusip))
             return 0;
         else return 1;
+    }
+
+    @Override
+    public String toString() {
+        return this.getCusip() + ": " + this.getIssuerName() + ", " + this
+                .getNumberOfShares() + ", " + this.getPosition() + "\n";
     }
 }

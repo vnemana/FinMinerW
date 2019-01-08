@@ -5,11 +5,16 @@
 </head>
 <body>
     <wicket:panel>
-        <div style="margin: auto; width: 100%;">
-            <form wicket:id="searchfundform" method="post" action="searchfund" style="padding:10px">
-                <h2>Search Fund:</h2>
-                <input wicket:id="fundsearchentry" type="text" id="say-fund-search" name="searchstring" />
-                <input type="submit" id="searchfund-button" value="Search Fund"/>
+        <div>
+            <form style="position: relative;left: 10%;"
+                  wicket:id="searchfundform" method="post"
+                  action="searchfund">
+                    <input wicket:id="fundsearchentry"
+                           type="text"
+                           id="say-fund-search"  name="searchstring" />
+                    <input type="submit"
+                           id="searchfund-button"
+                           value="Search Fund"/>
             </form>
         </div>
     </wicket:panel>
