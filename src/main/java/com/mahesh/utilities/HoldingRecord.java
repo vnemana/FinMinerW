@@ -4,6 +4,15 @@ package com.mahesh.utilities;
 public class HoldingRecord implements Comparable{
     private final String issuerName;
     private final String cusip;
+
+    public void setNumberOfShares(int numberOfShares) {
+        this.numberOfShares = numberOfShares;
+    }
+
+    public void setPosition(long position) {
+        this.position = position;
+    }
+
     private int numberOfShares;
     private long position;
 

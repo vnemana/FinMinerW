@@ -82,14 +82,16 @@ public class FilingDetailPage {
             Element element = (Element) node;
             String issuerName = element.getElementsByTagName("nameOfIssuer").item(0).getTextContent();
             String cusip = element.getElementsByTagName("cusip").item(0).getTextContent();
-            long numberOfShares = Long.valueOf(element.getElementsByTagName("sshPrnamt").item(0).getTextContent());
+            int numberOfShares = Integer.valueOf(element.getElementsByTagName
+                    ("sshPrnamt").item(0).getTextContent());
             long position = Long.valueOf(element.getElementsByTagName("value").item(0).getTextContent())*1000;
 
             HoldingRecord hr = new HoldingRecord(issuerName, cusip, numberOfShares, position);
             HoldingRecord existingHr = holdingRecords.get(cusip);
             if (existingHr != null) {
-                existingHr.numberOfShares += numberOfShares;
-                existingHr.position += position;
+                existingHr.setNumberOfShares(existingHr.getNumberOfShares()
+                        + numberOfShares);
+                existingHr.setPosition(existingHr.getPosition() + position);
             }
             else {
                 holdingRecords.put(cusip, hr);
