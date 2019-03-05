@@ -2,7 +2,6 @@ package com.mahesh.utilities;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.mahesh.web.SearchFundsForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -28,9 +27,10 @@ public class FilingDetailPage {
     private static final String searchSite = "https://www.sec.gov";
     private final static Logger logger = LoggerFactory.getLogger(
             FilingDetailPage.class);
-    public FilingDetailPage(String url) {
+    public FilingDetailPage(URL url) {
         try (final WebClient webClient = new WebClient()) {
             filing13FPage = webClient.getPage(url);
+            System.out.println(filing13FPage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,9 +60,8 @@ public class FilingDetailPage {
         return null;
     }
 
-    public HashMap<String, HoldingRecord> parseRawFiling(String urlString)
+    public HashMap<String, HoldingRecord> parseRawFiling(URL url)
             throws IOException, ParserConfigurationException, SAXException {
-        URL url = new URL(urlString);
         URLConnection urlConnection = url.openConnection();
         urlConnection.connect();
 
@@ -97,9 +96,8 @@ public class FilingDetailPage {
                 holdingRecords.put(cusip, hr);
             }
         }
-        Iterator it = holdingRecords.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : holdingRecords.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             logger.info(pair.getValue().toString());
         }
         return holdingRecords;

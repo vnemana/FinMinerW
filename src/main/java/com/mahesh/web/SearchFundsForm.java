@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,7 +23,7 @@ public class SearchFundsForm extends Form {
     private static final String searchUrl = "https://www.sec.gov/cgi-bin/browse-edgar?company=";
     private static final String searchSite = "https://www.sec.gov";
     private static final String search13fParam = "&type=13F-HR&count=100";
-    private TextField searchField;
+    private final TextField searchField;
 
     public SearchFundsForm(String id) {
         super(id);
@@ -68,11 +68,17 @@ public class SearchFundsForm extends Form {
 //                            return;
 //                        }
                         if (filing13FLinks != null && !filing13FLinks.isEmpty()) {
+                            URL filingDetailURL = new URL(filing13FLinks.get
+                                    (0).getLink());
                             FilingDetailPage filingDetailPage = new
-                                    FilingDetailPage(filing13FLinks.get(0).getLink());
-                            String rawFilingURL = filingDetailPage.getRawFiling();
-                            logger.info ("Raw Filing URL: " + rawFilingURL);
-                            if (rawFilingURL != null) {
+                                    FilingDetailPage(filingDetailURL);
+                            String rawFilingURLString = filingDetailPage
+                                    .getRawFiling();
+                            logger.info ("Raw Filing URL: " +
+                                    rawFilingURLString);
+                            if (rawFilingURLString != null) {
+                                URL rawFilingURL = new URL(rawFilingURLString);
+
                                 HashMap<String, HoldingRecord> holdingRecords
                                         = filingDetailPage.parseRawFiling(rawFilingURL);
 //                                request.setAttribute("fData", holdingRecords);
@@ -88,14 +94,10 @@ public class SearchFundsForm extends Form {
                     }
                 } catch (ElementNotFoundException e) {
                     System.out.println("Element Not Found Exception");
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
+                } catch (SAXException | ParserConfigurationException e) {
                     e.printStackTrace();
                 }
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
