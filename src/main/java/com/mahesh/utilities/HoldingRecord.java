@@ -12,7 +12,7 @@ import java.util.List;
 
 //TODO: Ideally HoldingRecord and Holding should be the same thing.
 public class HoldingRecord implements Comparable{
-    private final String issuerName;
+    private String issuerName;
     private final String cusip;
     private String stock;
     private int numberOfShares;
@@ -42,8 +42,6 @@ public class HoldingRecord implements Comparable{
     public void setStockFromCusip () {
         try {
             if (!cusip.isEmpty()) {
-                String stock;
-                String companyName;
                 final WebClient webClient = new WebClient();
                 CusipDao cusipDao = new CusipDao();
                 Cusip cusipFromDb = cusipDao.getCusipData(cusip);
@@ -51,16 +49,17 @@ public class HoldingRecord implements Comparable{
                 if (cusipFromDb == null) {
 
                     URL stockLookupURL = new URL(urlString);
-                    stock = parseStockFromURL(webClient, stockLookupURL);
-                    companyName = parseCompanyNameFromURL (webClient,
-                            stockLookupURL);
-                    Cusip cusipDto = new Cusip (cusip, stock, companyName);
+                    final HtmlPage stockLookupPage = webClient.getPage
+                            (stockLookupURL);
+                    stock = parseStockFromURL(webClient, stockLookupPage);
+                    issuerName = parseCompanyNameFromURL (webClient,
+                            stockLookupPage);
+                    Cusip cusipDto = new Cusip (cusip, stock, issuerName);
                     cusipDao.insertStockCusip(cusipDto);
                 }
                 else {
-                    System.out.println("Retrieved from db " +
-                            cusipFromDb.getStock() + ", " + cusipFromDb
-                            .getCompanyName());
+                    stock = cusipFromDb.getStock();
+                    issuerName = cusipFromDb.getCompanyName();
                 }
             }
         } catch (IOException e) {
@@ -102,11 +101,10 @@ public class HoldingRecord implements Comparable{
                 .getNumberOfShares() + ", " + this.getPosition() + "\n";
     }
 
-    private String parseStockFromURL(WebClient webClient, URL stockLookupURL)
+    private String parseStockFromURL(WebClient webClient, HtmlPage
+            stockLookupPage)
             throws IOException {
         String stock = "";
-        final HtmlPage stockLookupPage = webClient.getPage
-                (stockLookupURL);
         String stockSource =
                 "/html/body/table[1]/tbody/tr/td[2]/table[2]/tbody/tr[1" +
                         "]/td[2]/table/tbody/tr[3]/td[2]/font/a";
@@ -116,16 +114,13 @@ public class HoldingRecord implements Comparable{
 
         if (domNodesList.size() > 0) {
             stock = domNodesList.get(0).getTextContent();
-            System.out.println("Stock: " + stock);
         }
         return stock;
     }
 
-    private String parseCompanyNameFromURL(WebClient webClient, URL
-            stockLookupURL) throws IOException {
+    private String parseCompanyNameFromURL(WebClient webClient, HtmlPage
+            stockLookupPage) throws IOException {
         String companyName = "";
-        final HtmlPage stockLookupPage = webClient.getPage
-                (stockLookupURL);
         String companyNameSource =
                 "/html/body/table[1]/tbody/tr/td[2]/table[2" +
                         "]/tbody/tr[1]" +
@@ -135,7 +130,6 @@ public class HoldingRecord implements Comparable{
 
         if (domNodesList.size() > 0) {
             companyName = domNodesList.get(0).getTextContent();
-            System.out.println("Company Name: " + companyName);
         }
         return companyName;
     }

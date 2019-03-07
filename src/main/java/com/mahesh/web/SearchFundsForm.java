@@ -3,6 +3,9 @@ package com.mahesh.web;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+import com.mahesh.database.dto.Filing;
+import com.mahesh.database.dto.Fund;
+import com.mahesh.database.dto.Holding;
 import com.mahesh.utilities.FilingDetailPage;
 import com.mahesh.utilities.HoldingRecord;
 import org.apache.wicket.markup.html.form.Form;
@@ -89,6 +92,11 @@ public class SearchFundsForm extends Form {
                                 SearchResultsDisplayPage searchResultsDisplayPage =
                                         new SearchResultsDisplayPage(holdingRecords);
                                 setResponsePage(searchResultsDisplayPage);
+
+                                Holding holding = new Holding();
+                                Fund fund = new Fund(filingDetailPage
+                                        .getFundName());
+                                Filing filing = new Filing();
                             }
                         }
                     }

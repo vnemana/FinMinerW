@@ -22,11 +22,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FilingDetailPage {
-    private String companyName;
+    private String fundName;
     private HtmlPage filing13FPage;
     private static final String searchSite = "https://www.sec.gov";
     private final static Logger logger = LoggerFactory.getLogger(
             FilingDetailPage.class);
+
     public FilingDetailPage(URL url) {
         try (final WebClient webClient = new WebClient()) {
             filing13FPage = webClient.getPage(url);
@@ -103,7 +104,7 @@ public class FilingDetailPage {
         return holdingRecords;
     }
 
-    Date getFilingDate() {
+    public Date getFilingDate() {
         try {
             String source = "/html/body/div[4]/div[1]/div[2]/div[1]/div[2]";
             List<DomNode> domNodes = filing13FPage.getByXPath(source);
@@ -117,7 +118,7 @@ public class FilingDetailPage {
         return null;
     }
 
-    Date getReportDate() {
+    public Date getReportDate() {
         try {
             String source = "/html/body/div[4]/div[1]/div[2]/div[2]/div[2]";
             List<DomNode> domNodes = filing13FPage.getByXPath(source);
@@ -131,9 +132,9 @@ public class FilingDetailPage {
         return null;
     }
 
-    String getCompanyName() {
-        if (companyName != null && ! companyName.isEmpty())
-            return companyName;
+    public String getFundName() {
+        if (fundName != null && ! fundName.isEmpty())
+            return fundName;
 
         try (final WebClient webClient = new WebClient()){
             String source = "/html/body/div[4]/div[2]/div[1]/table/tbody/tr[2]/td[3]/a/@href";
@@ -144,8 +145,8 @@ public class FilingDetailPage {
                 List<DomNode> domNodesList = primaryDoc.getByXPath(companySource);
 
                 if (domNodesList.size() > 0) {
-                    companyName = domNodesList.get(0).getTextContent();
-                    return companyName;
+                    fundName = domNodesList.get(0).getTextContent();
+                    return fundName;
                 }
             }
         } catch (IOException e) {
