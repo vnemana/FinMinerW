@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -97,6 +98,10 @@ public class SearchFundsForm extends Form {
                                 Fund fund = new Fund(filingDetailPage
                                         .getFundName());
                                 Filing filing = new Filing();
+                                filing.setFilingDate((Date) filingDetailPage.getFilingDate());
+                                filing.setReportDate((Date) filingDetailPage.getReportDate());
+                                filing.setFilingType (filingDetailPage.getFilingType());
+
                             }
                         }
                     }

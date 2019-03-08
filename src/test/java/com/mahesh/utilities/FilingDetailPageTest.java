@@ -51,4 +51,13 @@ public class FilingDetailPageTest {
         String fundName = filingDetailPage.getFundName();
         System.out.println(fundName);
     }
+
+    @Test
+    public void getFilingType() throws MalformedURLException {
+        URL filingURL = new URL("https://www.sec" +
+                ".gov/Archives/edgar/data/1067983/000095012319002221/0000950123-19-002221-index.htm");
+        FilingDetailPage filingDetailPage = new FilingDetailPage(filingURL);
+        String fundName = filingDetailPage.getFilingType();
+        System.out.println(fundName);
+    }
 }

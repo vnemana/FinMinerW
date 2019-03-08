@@ -118,6 +118,15 @@ public class FilingDetailPage {
         return null;
     }
 
+    public String getFilingType() {
+        String source = "/html/body/div[4]/div[1]/div[1]/div[1]/strong";
+        List<DomNode> domNodes = filing13FPage.getByXPath(source);
+        if(domNodes.size() > 0) {
+            return domNodes.get(0).getTextContent();
+        }
+        return null;
+    }
+
     public Date getReportDate() {
         try {
             String source = "/html/body/div[4]/div[1]/div[2]/div[2]/div[2]";
