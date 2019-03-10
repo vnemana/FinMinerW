@@ -19,7 +19,10 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FilingDetailPage {
     private String fundName;
@@ -51,8 +54,11 @@ public class FilingDetailPage {
             HtmlTableRow ii_row = resultsFiling13FTable.getRow(ii);
             HtmlTableCell ii_rowCell = ii_row.getCell(2);
             String docString = ii_rowCell.asText();
-            if (docString.equals("form13fInfoTable.xml")) {
-                String sourceData = sourceArr[0] + (ii+1) + sourceArr[2];
+            HtmlTableCell ii_typeCell = ii_row.getCell(3);
+            String typeOfDoc = ii_typeCell.asText();
+            if (docString.toLowerCase().contains("xml") &&
+                    typeOfDoc.toLowerCase().equals("information table")) {
+                    String sourceData = sourceArr[0] + (ii+1) + sourceArr[2];
                 List<DomNode> sourceNodes = filing13FPage.getByXPath(sourceData);
                 if (sourceNodes.size() > 0)
                     return searchSite + sourceNodes.get(0).getTextContent();
@@ -87,6 +93,7 @@ public class FilingDetailPage {
             long position = Long.valueOf(element.getElementsByTagName("value").item(0).getTextContent())*1000;
 
             HoldingRecord hr = new HoldingRecord(issuerName, cusip, numberOfShares, position);
+            hr.setStockFromCusip();
             HoldingRecord existingHr = holdingRecords.get(cusip);
             if (existingHr != null) {
                 existingHr.setNumberOfShares(existingHr.getNumberOfShares()
@@ -104,22 +111,17 @@ public class FilingDetailPage {
         return holdingRecords;
     }
 
-    public Date getFilingDate() {
-        try {
-            String source = "/html/body/div[4]/div[1]/div[2]/div[1]/div[2]";
-            List<DomNode> domNodes = filing13FPage.getByXPath(source);
-            if(domNodes.size() > 0) {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                return dateFormat.parse(domNodes.get(0).getTextContent());
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public LocalDate getFilingDate() {
+        String source = "/html/body/div[4]/div[1]/div[2]/div[1]/div[2]";
+        List<DomNode> domNodes = filing13FPage.getByXPath(source);
+        if(domNodes.size() > 0) {
+            return LocalDate.parse(domNodes.get(0).getTextContent());
         }
         return null;
     }
 
     public String getFilingType() {
-        String source = "/html/body/div[4]/div[1]/div[1]/div[1]/strong";
+        String source = "/html/body/div[4]/div[3]/div[3]/p/strong[4]";
         List<DomNode> domNodes = filing13FPage.getByXPath(source);
         if(domNodes.size() > 0) {
             return domNodes.get(0).getTextContent();
@@ -127,16 +129,11 @@ public class FilingDetailPage {
         return null;
     }
 
-    public Date getReportDate() {
-        try {
-            String source = "/html/body/div[4]/div[1]/div[2]/div[2]/div[2]";
-            List<DomNode> domNodes = filing13FPage.getByXPath(source);
-            if(domNodes.size() > 0) {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                return dateFormat.parse(domNodes.get(0).getTextContent());
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public LocalDate getReportDate() {
+        String source = "/html/body/div[4]/div[1]/div[2]/div[2]/div[2]";
+        List<DomNode> domNodes = filing13FPage.getByXPath(source);
+        if(domNodes.size() > 0) {
+            return LocalDate.parse(domNodes.get(0).getTextContent());
         }
         return null;
     }

@@ -10,11 +10,16 @@
                   wicket:id="searchfundform" method="post"
                   action="searchfund">
                     <input wicket:id="fundsearchentry"
-                           type="text"
-                           id="say-fund-search"  name="searchstring" />
+                           type="text" name="searchstring" />
                     <input type="submit"
-                           id="searchfund-button"
+                           wicket:id="searchfund-button"
                            value="Search Fund"/>
+                    <br>
+                    <input wicket:id="ciksearchentry"
+                           type="text" name="cikstring" />
+                    <input type="submit"
+                           wicket:id="ciksearch-button"
+                           value="Search CIK#"/>
             </form>
         </div>
     </wicket:panel>

@@ -8,9 +8,9 @@ import com.mahesh.database.dto.Fund;
 import com.mahesh.database.dto.Holding;
 import org.junit.Test;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -43,8 +43,8 @@ public class HoldingTest {
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(2018, 03, 01);
-            Date filingDate = new Date(calendar.getTimeInMillis());
-            Date reportDate = new Date(calendar.getTimeInMillis());
+            LocalDate filingDate = LocalDate.of(2018,03,01);
+            LocalDate reportDate = LocalDate.of(2018,03,01);
 
             String filingType = "13-F";
             Filing retFiling = filingDao.getFiling(retFund.getFundId(),
@@ -90,8 +90,8 @@ public class HoldingTest {
 
             Calendar calendar = Calendar.getInstance();
             calendar.set (2018, 03, 01);
-            Date filingDate = new Date(calendar.getTimeInMillis());
-            Date reportDate = new Date(calendar.getTimeInMillis());
+            LocalDate filingDate = LocalDate.of(2018,03,01);
+            LocalDate reportDate = LocalDate.of(2018,03,01);
 
             String filingType = "13-F";
             Filing retFiling = filingDao.getFiling(retFund.getFundId(), filingDate,

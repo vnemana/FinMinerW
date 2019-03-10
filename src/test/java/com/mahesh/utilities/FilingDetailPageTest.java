@@ -7,7 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class FilingDetailPageTest {
         URL filingURL = new URL("https://www.sec" +
                 ".gov/Archives/edgar/data/1067983/000095012319002221/0000950123-19-002221-index.htm");
         FilingDetailPage filingDetailPage = new FilingDetailPage(filingURL);
-        Date filingDate = filingDetailPage.getFilingDate();
+        LocalDate filingDate = filingDetailPage.getFilingDate();
         System.out.println(filingDate);
     }
 
@@ -39,7 +39,7 @@ public class FilingDetailPageTest {
         URL filingURL = new URL("https://www.sec" +
                 ".gov/Archives/edgar/data/1067983/000095012319002221/0000950123-19-002221-index.htm");
         FilingDetailPage filingDetailPage = new FilingDetailPage(filingURL);
-        Date reportDate = filingDetailPage.getReportDate();
+        LocalDate reportDate = filingDetailPage.getReportDate();
         System.out.println(reportDate);
     }
 

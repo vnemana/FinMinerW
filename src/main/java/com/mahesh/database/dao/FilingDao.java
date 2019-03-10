@@ -3,14 +3,20 @@ package com.mahesh.database.dao;
 import com.mahesh.database.FundReportsDb;
 import com.mahesh.database.dto.Filing;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class FilingDao {
     public FilingDao() {
     }
 
-    public void insertFiling (int fundId, Date filingDate, String filingType,
-                              Date reportDate) throws SQLException {
+    public void insertFiling (int fundId, LocalDate filingDate, String filingType,
+                              LocalDate reportDate) throws SQLException {
         try {
             FundReportsDb db = new FundReportsDb();
             Connection conn = db.getConn();
@@ -20,9 +26,9 @@ public class FilingDao {
 
             PreparedStatement preparedStatement = conn.prepareStatement(insertString);
             preparedStatement.setLong(1, fundId);
-            preparedStatement.setDate(2, filingDate);
+            preparedStatement.setDate(2, Date.valueOf(filingDate));
             preparedStatement.setString(3, filingType);
-            preparedStatement.setDate(4,reportDate);
+            preparedStatement.setDate(4, Date.valueOf(reportDate));
 
             preparedStatement.execute();
             conn.close();
@@ -32,7 +38,7 @@ public class FilingDao {
         }
     }
 
-    public Filing getFiling(int fundId, Date filingDate, String filingType) {
+    public Filing getFiling(int fundId, LocalDate filingDate, String filingType) {
         Filing filing = new Filing();
         try {
             FundReportsDb db = new FundReportsDb();
@@ -50,8 +56,8 @@ public class FilingDao {
             else {
                 do {
                     filing.setFilingId(rs.getInt("filingId"));
-                    filing.setFilingDate(rs.getDate("filingDate"));
-                    filing.setReportDate(rs.getDate("reportDate"));
+                    filing.setFilingDate(rs.getDate("filingDate").toLocalDate());
+                    filing.setReportDate(rs.getDate("reportDate").toLocalDate());
                     filing.setFilingType(rs.getString("filingType"));
                 } while (rs.next());
             }

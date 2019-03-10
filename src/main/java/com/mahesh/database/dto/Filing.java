@@ -1,25 +1,27 @@
 package com.mahesh.database.dto;
 
-import java.sql.*;
+import java.time.LocalDate;
 
 public class Filing {
     int filingId;
     int fundId;
-    Date filingDate;
+    LocalDate filingDate;
     String filingType;
-    Date reportDate;
+    LocalDate reportDate;
 
     public Filing() {
     }
 
-    public Filing(int fundId, Date filingDate, String filingType, Date reportDate) {
+    public Filing(int fundId, LocalDate filingDate, String filingType,
+                  LocalDate reportDate) {
         this.fundId = fundId;
         this.filingDate = filingDate;
         this.filingType = filingType;
         this.reportDate = reportDate;
     }
 
-    public Filing(int filingId, int fundId, Date filingDate, String filingType, Date reportDate) {
+    public Filing(int filingId, int fundId, LocalDate filingDate, String
+            filingType, LocalDate reportDate) {
         this.filingId = filingId;
         this.fundId = fundId;
         this.filingDate = filingDate;
@@ -43,11 +45,11 @@ public class Filing {
         this.fundId = fundId;
     }
 
-    public Date getFilingDate() {
+    public LocalDate getFilingDate() {
         return filingDate;
     }
 
-    public void setFilingDate(Date filingDate) {
+    public void setFilingDate(LocalDate filingDate) {
         this.filingDate = filingDate;
     }
 
@@ -59,13 +61,11 @@ public class Filing {
         this.filingType = filingType;
     }
 
-    public Date getReportDate() {
+    public LocalDate getReportDate() {
         return reportDate;
     }
 
-    public void setReportDate(Date reportDate) {
+    public void setReportDate(LocalDate reportDate) {
         this.reportDate = reportDate;
     }
-
-
 }

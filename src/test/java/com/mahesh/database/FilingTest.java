@@ -6,9 +6,9 @@ import com.mahesh.database.dto.Filing;
 import com.mahesh.database.dto.Fund;
 import org.junit.Test;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
 
 
 public class FilingTest {
@@ -16,8 +16,8 @@ public class FilingTest {
     @Test (expected = SQLIntegrityConstraintViolationException.class)
     public void insert_with_invalid_fund_id() throws SQLException {
         Filing filing = new Filing();
-        Date filingDate = new Date(20180301);
-        Date reportDate = new Date(20180301);
+        LocalDate filingDate = LocalDate.of(2018,03,01);
+        LocalDate reportDate = LocalDate.of(2018,03,01);
         String filingType = "13-F";
 
         FilingDao fDao = new FilingDao();
@@ -31,9 +31,9 @@ public class FilingTest {
             fundDao.insertFund("TestFund");
             Fund retFund = fundDao.getFund("TestFund");
 
+            LocalDate filingDate = LocalDate.of(2018,03,01);
+            LocalDate reportDate = LocalDate.of(2018,03,01);
             FilingDao filingDao = new FilingDao();
-            Date filingDate = new Date(20180301);
-            Date reportDate = new Date(20180301);
             String filingType = "13-F";
 
             filingDao.insertFiling(retFund.getFundId(), filingDate, filingType,
@@ -42,7 +42,7 @@ public class FilingTest {
                     filingType);
 
             assert(retFiling.getFundId() == retFund.getFundId());
-            assert(retFiling.getReportDate() == reportDate);
+            assert retFiling.getReportDate() == reportDate;
         } catch (SQLException e) {
             e.printStackTrace();
         }
