@@ -19,7 +19,7 @@ public class HoldingRecord implements Comparable{
     private long position;
     private final String urlString;
 
-    public String getIssuerName() {
+    private String getIssuerName() {
         return issuerName;
     }
 
@@ -102,8 +102,7 @@ public class HoldingRecord implements Comparable{
     }
 
     private String parseStockFromURL(WebClient webClient, HtmlPage
-            stockLookupPage)
-            throws IOException {
+            stockLookupPage) {
         String stock = "";
         String stockSource =
                 "/html/body/table[1]/tbody/tr/td[2]/table[2]/tbody/tr[1" +
@@ -119,7 +118,7 @@ public class HoldingRecord implements Comparable{
     }
 
     private String parseCompanyNameFromURL(WebClient webClient, HtmlPage
-            stockLookupPage) throws IOException {
+            stockLookupPage) {
         String companyName = "";
         String companyNameSource =
                 "/html/body/table[1]/tbody/tr/td[2]/table[2" +

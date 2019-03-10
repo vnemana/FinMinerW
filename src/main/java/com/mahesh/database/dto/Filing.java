@@ -3,11 +3,11 @@ package com.mahesh.database.dto;
 import java.time.LocalDate;
 
 public class Filing {
-    int filingId;
-    int fundId;
-    LocalDate filingDate;
-    String filingType;
-    LocalDate reportDate;
+    private int filingId;
+    private int fundId;
+    private LocalDate filingDate;
+    private String filingType;
+    private LocalDate reportDate;
 
     public Filing() {
     }

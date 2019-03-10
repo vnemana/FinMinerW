@@ -6,18 +6,17 @@ import com.mahesh.database.dao.FundDao;
 import com.mahesh.database.dao.HoldingDao;
 import com.mahesh.utilities.HoldingRecord;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Holding {
-    int fundId;
-    int filingId;
-    int holdingId;
-    String cusip;
-    String stock;
-    double position;
-    int numShares;
+    private int fundId;
+    private int filingId;
+    private int holdingId;
+    private String cusip;
+    private String stock;
+    private double position;
+    private int numShares;
 
     public Holding(int fundId, int filingId, String cusip, String stock,
                    double position, int numShares) {
@@ -136,6 +135,7 @@ public class Holding {
         //If Yes, get Holding Id. Update it.
         HoldingDao holdingDao = new HoldingDao();
         try {
+            assert dbFiling != null;
             ArrayList<Holding> holdings = holdingDao.getHoldings(dbFiling
                     .getFilingId());
             if (holdings.size() > 0) {
@@ -146,13 +146,12 @@ public class Holding {
             e.printStackTrace();
             return;
         }
-        for (int ii=0; ii<holdingRecords.size(); ii++) {
-            HoldingRecord hRecord = holdingRecords.get(ii);
+        for (HoldingRecord hRecord : holdingRecords) {
             try {
                 //holdingDao.deleteHoldings(dbFiling.getFilingId());
                 //If No, insert Holding record.
-                holdingDao.insertHolding(dbFund.getFundId(),dbFiling.getFilingId
-                        (), hRecord.getCusip(), hRecord.getStock(),
+                holdingDao.insertHolding(dbFund.getFundId(), dbFiling.getFilingId
+                                (), hRecord.getCusip(), hRecord.getStock(),
                         hRecord.getPosition(), hRecord.getNumberOfShares());
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -1,6 +1,6 @@
 package com.mahesh.web;
 
-public class FilingLinkInfo {
+class FilingLinkInfo {
     private String link;
     private String filingDate;
 

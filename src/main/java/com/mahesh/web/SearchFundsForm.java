@@ -18,26 +18,24 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-public class SearchFundsForm extends Form {
+class SearchFundsForm extends Form<Void> {
     private final static Logger logger = LoggerFactory.getLogger(SearchFundsForm.class);
     private static final String searchUrl = "https://www.sec.gov/cgi-bin/browse-edgar?company=";
     private static final String searchSite = "https://www.sec.gov";
     private static final String search13fParam = "&type=13F-HR&count=100";
-    private final TextField searchField;
-    private final TextField cikSearchField;
+    private final TextField<String> searchField;
+    private final TextField<String> cikSearchField;
 
     public SearchFundsForm(String id) {
         super(id);
-        searchField =  new TextField("fundsearchentry", Model.of(""));
+        searchField =  new TextField<>("fundsearchentry", Model.of(""));
         add(searchField);
-        cikSearchField = new TextField("ciksearchentry", Model.of(""));
+        cikSearchField = new TextField<>("ciksearchentry", Model.of(""));
         add(cikSearchField);
 
         Button searchFundButton = new Button("searchfund-button") {
@@ -57,7 +55,7 @@ public class SearchFundsForm extends Form {
     }
 
     private void onCikSearchSubmit() {
-        String cik = (String) cikSearchField.getModelObject();
+        String cik = cikSearchField.getModelObject();
         String cikSearchUrl = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&" +
                 "CIK="+ cik +"&owner=include&count=40&hidefilings=0&type" +
                 "=13F-HR&count=100";
@@ -67,18 +65,12 @@ public class SearchFundsForm extends Form {
             logger.info("Filing Link: " + filing13FLinks.size());
             parseAndStoreFiling(filing13FLinks);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
+        } catch (IOException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
 
-    public final void onSearchFundSubmit() {
+    private void onSearchFundSubmit() {
         String fundString = (String) searchField.getDefaultModelObject();
         String urlString = searchUrl + fundString;
 
@@ -124,7 +116,7 @@ public class SearchFundsForm extends Form {
 
     private void parseAndStoreFiling(ArrayList<FilingLinkInfo> filing13FLinks) throws IOException, ParserConfigurationException, SAXException {
         System.out.println(filing13FLinks.size());
-        if (filing13FLinks != null && !filing13FLinks.isEmpty()) {
+        if (!filing13FLinks.isEmpty()) {
             for (FilingLinkInfo f: filing13FLinks) {
                 URL filingDetailURL = new URL(f.getLink());
                 FilingDetailPage filingDetailPage = new
@@ -141,10 +133,8 @@ public class SearchFundsForm extends Form {
                     ArrayList<HoldingRecord>
                             holdingRecordArrayList = new
                             ArrayList<>();
-                    Iterator it = holdingRecords.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry) it.next();
-                        holdingRecordArrayList.add((HoldingRecord) pair
+                    for (Map.Entry<String, HoldingRecord> pair : holdingRecords.entrySet()) {
+                        holdingRecordArrayList.add(pair
                                 .getValue());
                     }
 

@@ -36,7 +36,7 @@ public class FundDao {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(selectString);
 
-            if (rs.next() == false) {
+            if (!rs.next()) {
                 return null;
             }
             else {

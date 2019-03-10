@@ -7,11 +7,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 
 public class SearchResultsDisplayPage extends WebPage {
@@ -20,10 +19,9 @@ public class SearchResultsDisplayPage extends WebPage {
     public SearchResultsDisplayPage (final HashMap<String, HoldingRecord>
                                              holdingRecords) {
         super();
-        List<HoldingRecord> holdingRecordList = new ArrayList<HoldingRecord>();
-        Iterator it = holdingRecords.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        List<HoldingRecord> holdingRecordList = new ArrayList<>();
+        for (Object o : holdingRecords.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             holdingRecordList.add((HoldingRecord) pair.getValue());
         }
 
